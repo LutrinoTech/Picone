@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "house" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "title" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "age" TEXT NOT NULL,
+    "likes" INTEGER NOT NULL DEFAULT 0
+);
