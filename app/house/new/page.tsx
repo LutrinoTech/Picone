@@ -1,23 +1,17 @@
-import { db } from "@/app/db";
-import { redirect } from "next/navigation";
+"use client";
+
+import { createHouse } from "@/app/actions";
+import { useActionState, startTransition } from "react";
 
 const NewHouse = () => {
-  async function createHouse(formData: FormData) {
-    "use server";
+  const [formState, action] = useActionState(createHouse, { message: "" });
 
-    const title = formData.get("title") as string;
-    const image = formData.get("image") as string;
-    const age = formData.get("age") as string;
-
-    await db.house.create({
-      data: {
-        title,
-        image,
-        age,
-      },
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => {
+      action(formData);
     });
-
-    redirect("/");
   }
 
   return (
@@ -25,7 +19,7 @@ const NewHouse = () => {
       <h1>New House</h1>
       <form
         className="flex flex-col space-y-6 p-6 max-w-md mx-auto bg-white rounded-xl shadow-md mt-10"
-        action={createHouse}
+        onSubmit={handleSubmit}
       >
         <div className="flex flex-col space-y-2">
           <label htmlFor="title" className="text-sm font-medium text-gray-700">
@@ -69,6 +63,8 @@ const NewHouse = () => {
         >
           Create
         </button>
+
+        <div>{formState.message}</div>
       </form>
     </div>
   );
