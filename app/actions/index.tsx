@@ -1,10 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { db } from "../db";
 
 export async function deleteHouse(id: number) {
   await db.house.delete({ where: { id } });
+  revalidatePath("/");
   redirect("/");
 }
 
@@ -17,12 +19,13 @@ export async function createHouse(
   const age = data.get("age") as string;
 
   if (!title || !image || !age) {
-    return { message: "Please fill in all fields!" };
+    return { message: "Please fill in all fields !!!" };
   }
 
   await db.house.create({
     data: { title, image, age },
   });
 
+  revalidatePath("/");
   redirect("/");
 }
