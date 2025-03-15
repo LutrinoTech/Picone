@@ -27,3 +27,8 @@ export default async function House(props: IHouse) {
     </main>
   );
 }
+
+export async function generateStaticParams() {
+  const houses = await db.house.findMany();
+  return houses.map((house) => ({ id: house.id.toString() }));
+}
